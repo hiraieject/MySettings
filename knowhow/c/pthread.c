@@ -69,7 +69,7 @@ noname_parent_func(void)
 
 	// destroy thread
 	{
-		thread_exit = false;
+		thread_exit = true;
 
 #ifdef PTHREAD_USE_JOIN
 		// thread終了の待合せ
