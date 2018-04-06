@@ -1,6 +1,7 @@
 
 
-git commit
+git commit .
+git status
 
 git remote add origin https://hiraieject@github.com/hiraieject/MySettings.git
 git push -u origin master
