@@ -15,9 +15,14 @@ git push -u origin master
 git push
 ↑ ２回目以降
 
-password username を省略するばあいは、.git/config のURLにuserame:passwordを埋め込む
+password username を省略する
+~/.netrc
+machine github.com
+login username
+password xxxxxxx
 
 --------------
+
 
 
 git init
