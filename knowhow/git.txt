@@ -1,0 +1,78 @@
+
+
+
+git init
+ -> カレントフォルダをリポジトリにする
+
+git init <folder>
+ -> 指定フォルダをリポジトリにする
+
+git clone <リポジトリのパス>
+ -> リポジトリのクローンをカレントに作成
+
+git config --global user.name <ユーザー名>
+git config --global user.email <メールアドレス>
+ -> ユーザー名とemailの初期設定
+
+git config --global core.editor 'エディタのパス'
+ -> コミット時に起動するエディタを変更する
+
+git config --global http.proxy 'http://10.77.8.70:8080'
+git config --global url."https://".insteadOf git://
+ -> proxy の設定(global)
+
+git config --list
+ -> global設定の確認 (~/.gitconfig)
+
+git config --unset <削除したい設定の名前>
+ -> 設定の削除
+
+git add <ファイルorフォルダ>
+ -> ローカルリポジトリ(=./.git)にファイルを追加
+
+git reset
+ -> ローカルリポジトリを空にする
+
+git reset <ファイル>
+ -> ローカルリポジトリからファイルを削除
+
+git commit
+git commit -m <コミットコメント>
+ -> ローカルリポジトリにコミットする
+
+git status
+ -> 作業ディレクトリおよびインデックスの状態を確認する
+
+.gitignore
+ 無視するファイルを列挙する。ワイルドカード使用可、一行一エントリ
+
+git log
+git log <ファイルパス>
+git log -n <表示件数>
+git log --grep="<検索パターン>"
+ -> コミットログを確認
+
+git reflog
+ -> コマンド履歴
+
+git rm <ファイル>
+ -> ファイルを削除して、インデックスからも削除する
+
+
+------
+GitHub/リモートリポジトリ
+
+GitHub でリポジトリを作成、URLを確定
+https://github.com/<user name>/<repository name>.git
+
+git remote add <nickname> https://github.com/<user name>/<repository name>.git
+ -> 作成したリポジトリを nickname という名前でアクセス出来るようにする
+
+git push -u <nickname> master
+ex)
+ git push -u origin master
+
+参考
+Gitの基本的な使い方メモ - Qiita
+https://qiita.com/opengl-8080/items/451c5967cbbc262f4f0d
+

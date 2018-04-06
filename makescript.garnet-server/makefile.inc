@@ -19,8 +19,11 @@ newtree:
 ##		echo "	================================================="; \
 ##		exit 1; \
 ##	fi
-	basename `pwd` > .targetfolder
-	make REV="$(REV)" _newtree_`cat .targetfolder`
+	echo $(SVNBASE) > .svnbase
+	echo $(SVNFOLDER) > .svnfolder
+	echo $(SVNTARGET) > .targetfolder
+	make REV="$(REV)" _newtree
+
 newsrc:
 ##	@if [ -d `cat .targetdate`_`cat .targetfolder` ] ; then \
 ##		echo "	================================================="; \
@@ -29,161 +32,65 @@ newsrc:
 ##		echo "	================================================="; \
 ##		exit 1; \
 ##	fi
-	basename `pwd` > .targetfolder
-	make REV="$(REV)" _newsrc_`cat .targetfolder`
+	echo $(SVNBASE) > .svnbase
+	echo $(SVNFOLDER) > .svnfolder
+	echo $(SVNTARGET) > .targetfolder
+	make REV="$(SVNREVISION)" _newsrc
 
 remove_current_tree:
 	sudo rm -rf `cat .targetdate`_`cat .targetfolder`
 
 ## ===============================================
 
-JW230_SVNBASE=https://jw230-wpf.svn.vserv.jp.panasonic.com/repos
-VZ575N_SVNBASE=https://vz575n-nt.svn.vserv.jp.panasonic.com/repos
-VZ585N_SVNBASE=https://networkpf.svn.vserv.jp.panasonic.com/repos/Sigma/products/VZ585N
-2017GARNET_SVNBASE=https://fp.svn.vserv.jp.panasonic.com/repos/MAIN/2017Garnet
-LF8_SVNBASE=https://fp.svn.vserv.jp.panasonic.com/repos/MAIN/LF8
-2017AQUAM_SVNLOCAL=svn://192.168.0.86/repo/2017aquamarine
-2018AQUAM_SVNBASE=https://fp.svn.vserv.jp.panasonic.com/repos/MAIN/2018Aqua
-src_newsrc_aquam:
+_newsrc:
 	date +%y%m%d  > .targetdate
-	echo "trunk" > .svnfolder
-	echo "$(2017GARNET_SVNBASE)" > .svnbase
-#	svn co $(REV) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
-	mkdir -p `cat .targetdate`_`cat .targetfolder`
-	(cd `cat .targetdate`_`cat .targetfolder`; \
-	 sudo tar xvfz ../src_170526/devfiles.tgz; \
-	 sudo tar xvfz ../src_170526/ph1_dtv_Aquamarine_V0002_20170317.tgz; \
-	 sudo chown -R hirai.hirai ph1; \
-	 sudo mv ph1/* .; \
-	 sudo mv ph1/.??* .)
-	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
-	 /bin/rm -f arm-2010q1; \
-	 ln -s /opt/redhat/arm-2010q1 .)
-localsvn_newsrc_aquam:
-	date +%y%m%d  > .targetdate
-	echo "$(2017AQUAM_SVNLOCAL)" > .svnbase
-	echo "branch" > .svnfolder
-#	echo "ph1v0002" > .targetfolder
-	echo "ph1v0500" > .targetfolder
 	svn co $(REV) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
+ifeq ($(ARCH),aquamarine)
 	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
 	 /bin/rm -f arm-2010q1; \
 	 ln -s /opt/redhat/arm-2010q1 .)
-official_newsrc_aquam:
-	date +%y%m%d  > .targetdate
-	echo "$(2018AQUAM_SVNBASE)" > .svnbase
-	echo "trunk" > .svnfolder
-	echo "startup" > .targetfolder
-#	echo "branches" > .svnfolder
-#	echo "startup_r4539" > .targetfolder
-	svn co $(REV) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
-	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
-	 /bin/rm -f arm-2010q1; \
-	 ln -s /opt/redhat/arm-2010q1 .)
+endif
 
-## \\10.78.112.116\common\³«È¯»ñÎÁ\WM_LAN\10_2017_2_Aquamarine\SDK_v0500_add_net_comm
-yama_newsrc_aquam:
-	echo "yama" > .targetfolder
-	date +%y%m%d  > .targetdate
-	echo "trunk" > .svnfolder
-	echo "$(2017GARNET_SVNBASE)" > .svnbase
-#	svn co $(REV) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
-	mkdir -p `cat .targetdate`_`cat .targetfolder`
-	(cd `cat .targetdate`_`cat .targetfolder`; \
-	 sudo tar xvfz ../ph1v0500_0804.tgz; \
-	 sudo chown -R hirai.hirai ph1v0500; \
-	 sudo mv ph1v0500/* .; \
-	 sudo mv ph1v0500/.??* .)
-	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
-	 /bin/rm -f arm-2010q1; \
-	 ln -s /opt/redhat/arm-2010q1 .)
-
-SDK_NEWSRC_ARCHIVE=sdk_ver0630_20171113/Aquamarine_V0630_20171113.tgz
-SDK_NEWSRC_DEV_ARCHIVE=sdk_ver0630_20171113/Aquamarine_V0630_20171113_devfiles.tgz
-sdk_newsrc_aquam:
-	echo "sdk" > .targetfolder
-	date +%y%m%d  > .targetdate
-	mkdir -p `cat .targetdate`_`cat .targetfolder`
-	(cd `cat .targetdate`_`cat .targetfolder`; \
-	 sudo tar xvfz ../$(SDK_NEWSRC_ARCHIVE); \
-	 sudo tar xvfz ../$(SDK_NEWSRC_DEV_ARCHIVE); \
-	 sudo chown -R hirai.hirai ph1; \
-	 sudo chmod -R og+rx ph1; \
-	 sudo mv ph1/* .; \
-	 sudo mv ph1/.??* .; \
-	 sudo rmdir ph1)
-	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
-	 /bin/rm -f arm-2010q1; \
-	 ln -s /opt/redhat/arm-2010q1 .)
-
-_newsrc_aquam:
-#	make src_newsrc_aquam
-#	make localsvn_newsrc_aquam
-	make official_newsrc_aquam
-#	make yama_newsrc_aquam
-
-_newsrc_sf2:
-	date +%y%m%d  > .targetdate
-	echo "trunk" > .svnfolder
-	echo "$(2017GARNET_SVNBASE)" > .svnbase
-	svn co $(REV) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
-
-_newsrc_lfe8:
-	date +%y%m%d  > .targetdate
-	echo "trunk" > .svnfolder
-	echo "$(LF8_SVNBASE)" > .svnbase
-	svn co `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
-
-_newtree_lfe8 _newtree_sf2 _newtree_aquam:
-	make _newsrc_`cat .targetfolder`
-	make compile_all
-##	make image
-
-newsrc_startupr5216_panaapp:
-	echo 'startupr5216_panaapp' > .targetfolder
-	basename `pwd` > .tksname
-	date +%y%m%d  > .targetdate
-	echo "branches" > .svnfolder
-	echo "$(2018AQUAM_SVNBASE)" > .svnbase
-	svn co $(REV) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
-	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
-	 /bin/rm -f arm-2010q1; \
-	 ln -s /opt/redhat/arm-2010q1 .)
-newtree_startupr5216_panaapp:
-	make newsrc_startupr5216_panaapp
-	make compile_all
-	make chg_toshiba
-
-
-chg_toshiba:
-	@(cd `cat .targetdate`_`cat .targetfolder`; \
-	 echo -n "pwd="; pwd; \
-	 tar xvfz ../toshiba_after.tgz)
-	make MAKEDIR=linux MAKETARGET=clean __compile
-	make MAKEDIR=. MAKETARGET=linux __compile
+_newtree:
+	make REV="$(REV)" _newsrc
 	make compile_all
 
 ## ===============================================
+##_newtree_get_src_cvs:
+##	@if [ -d `cat .targetdate`_`cat .targetfolder` ] ; then \
+##		echo "	================================================="; \
+##		echo "	today's tree `cat .targetdate`_`cat .targetfolder` is exist"; \
+##		echo "	try \"make remove_current_tree\""; \
+##		echo "	================================================="; \
+##		exit 1; \
+##	fi
+##
+##	cvs -d ":pserver:hirai@asuka2:/usr/local/cvsroot" co -d `cat .targetdate`_`cat .targetfolder` `cat .targetcvs`
+##
+##_newsrc_lf_garnet:
+##	@date +%y%m%d  > .targetdate
+##	@echo "lf_garnet" > .targetcvs
+##	@echo "lf_garnet" > .targetcvsdir
+##	make _newtree_get_src_cvs
+##	(cd `cat .targetdate`_`cat .targetfolder`; ./sym_link.sh)
+##
+##_newtree_lf_garnet:
+##	make _newsrc_`cat .targetfolder`
+##	make compile_all
+##
+## ===============================================
 
 __compile:
-	@(cd `cat .targetdate`_`cat .targetfolder`; \
-	 echo "#!/bin/bash" > .build.sh; \
-	 echo "source setup_env.sh" >> .build.sh; \
-	 echo "cd usr/src" >> .build.sh; \
-	 echo "source dtvrec/appli/tks_dtv/build/common/build_env lx arm ld6bref us" >> .build.sh; \
-	 echo "make -C $(MAKEDIR) $(MAKETARGET)" >> .build.sh; \
-	 echo "#############"; \
-	 echo "#############"; \
-	 echo "############# make -C $(MAKEDIR) $(MAKETARGET)"; \
-	 echo "#############"; \
-	 echo "#############"; \
-	 bash .build.sh)
+	@(cd `cat .targetdate`_`cat .targetfolder` ; \
+	  echo "make -C $(MAKEDIR) $(MAKETARGET)" > .build2.sh; \
+	  chmod +x .build2.sh)
+	@make MAKEDIR=. SCRIPT=../../.build2.sh __script
 __script:
 	@(cd `cat .targetdate`_`cat .targetfolder`; \
 	 echo "#!/bin/bash" > .build.sh; \
-	 echo "source setup_env.sh" >> .build.sh; \
+	 echo $(BUILDENVARG1) >> .build.sh; \
 	 echo "cd usr/src" >> .build.sh; \
-	 echo "source dtvrec/appli/tks_dtv/build/common/build_env lx arm ld6bref us" >> .build.sh; \
+	 echo $(BUILDENVARG2) >> .build.sh; \
 	 echo "(cd $(MAKEDIR); $(SCRIPT))" >> .build.sh; \
 	 echo "#############"; \
 	 echo "#############"; \
@@ -194,8 +101,10 @@ __script:
 
 compile_all:
 	make MAKEDIR=. MAKETARGET= __compile
+ifeq ($(CHG_TOSHIBA),yes)
+	make chg_toshiba
+endif
 	make image
-#	make tftp
 	make chk_gtags
 compile_AppSrc:
 	@make backup_daily
@@ -234,16 +143,6 @@ distclean_lighttpd:
 ##	$(MAKE) -C `cat .targetdate`_`cat .targetfolder`/usr/src/AppSrc/lighttpd distclean
 ##	make compile_all MODULE=AppSrc
 
-clean_kernel:
-	make MAKEDIR=linux MAKETARGET="clean" __compile
-distclean_kernel:
-#	make MAKEDIR=linux MAKETARGET="-k clean" __compile
-#	make MAKEDIR=linux MAKETARGET="-k mrproper" __compile
-	make MAKEDIR=linux MAKETARGET="-k distclean" __compile
-config_kernel:
-	make MAKEDIR=. MAKETARGET=linux_config __compile
-
-
 clean_padp:
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/dtvrec; \
 	 find . -name \*.o -exec rm \{} \; ; \
@@ -257,12 +156,19 @@ compile_padp:
 clean_lpad:
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/dtvrec; \
 	 find . -name \*.o -exec rm \{} \; ; \
-	 find . -name \*.d -exec rm \{} \; )
+	 find . -name \*.d -exec rm \{} \; ; \
+	 find . -name \*.a -exec rm \{} \; ; \
+	 find . -name \*.lib -exec rm \{} \; ; \
+	 find . -name \lpad* -exec rm \{} \; ; \
+	 svn up )
 compile_lpad:
 	@make backup_daily
 ##	make clean_lpad
+	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/dtvrec/appli; \
+	 rm -f tks_dtv/build/boot/lpad* ./tks_dtv/build/common_us/BLD_lx_common_us/lpad*)
 	make MAKEDIR=. SCRIPT=./lpad_make.sh __script
 	make chk_gtags
+	make tftp
 compile_dtvrec:
 	@make compile_lpad
 
@@ -288,15 +194,29 @@ compile_ncurses:
 distclean_ncurses:
 	make MAKEDIR=AppSrc/ncurses MAKETARGET=distclean __compile
 
+kernel_menuconfig:
+	make MAKEDIR=linux-2.6.32-sLDx MAKETARGET=menuconfig __compile
+kernel_distclean:
+	make MAKEDIR=linux-2.6.32-sLDx MAKETARGET=distclean __compile
+
+compile_ui_test:
+	make MAKEDIR=dtvrec/appli/tks_dtv/ui MAKETARGET=ui_test __compile
+#	make image
+#	make tftp
+
+install_gdb:
+	cp 171116_sf2hr4620_wlan/usr/local/bin/gdb* `cat .targetdate`_`cat .targetfolder`/usr/local/bin
+
 rootfs:
 	make MAKEDIR=. MAKETARGET="rootfs" __compile
 rom:
-#	cp 141125_lfv70/usr/etc/php.ini `cat .targetdate`_`cat .targetfolder`/usr/etc/
-#	cp -r 141125_lfv70/usr/etc/lighttpd `cat .targetdate`_`cat .targetfolder`/usr/etc/
-#	cp PJMI `cat .targetdate`_`cat .targetfolder`/usr/local/userweb/htdocs/
-#	make MAKEDIR=. MAKETARGET="rom rootfs u-boot-script rootfs arigato" __compile
+ifeq ($(ARCH),garnet)
+	make MAKEDIR=. MAKETARGET="rom rootfs u-boot-script rootfs arigato" __compile
+endif
+ifeq ($(ARCH),aquamarine)
 	make MAKEDIR=../rom MAKETARGET= __compile
 	make MAKEDIR=. MAKETARGET=upg __compile
+endif
 	make tftp
 image:
 	@make rom
@@ -304,6 +224,9 @@ image:
 gtags:
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/AppSrc; gtags)
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/dtvrec; gtags)
+	if [ -d `cat .targetdate`_`cat .targetfolder`/usr/src/PanaApps ] ; then \
+		(cd `cat .targetdate`_`cat .targetfolder`/usr/src/PanaApps; gtags); \
+	fi
 chk_gtags:
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/AppSrc; \
 	 if [ ! -f GTAGS ] ; then \
@@ -313,24 +236,16 @@ chk_gtags:
 	 if [ ! -f GTAGS ] ; then \
 	 	gtags; \
 	 fi)
+	if [ -d `cat .targetdate`_`cat .targetfolder`/usr/src/PanaApps ] ; then \
+		(cd `cat .targetdate`_`cat .targetfolder`/usr/src/PanaApps; \
+	 	 if [ ! -f GTAGS ] ; then \
+	 		gtags; \
+	 	 fi); \
+	fi
 clean_gtags:
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/AppSrc; rm -f G*)
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/dtvrec; rm -f G*)
 
-##newsrc: _update_targetdate
-##	@if [ -d `cat .targetdate`_`cat .targetfolder` ] ; then \
-##		echo "	================================================="; \
-##		echo "	today's tree `cat .targetdate`_`cat .targetfolder` is exist"; \
-##		echo "	try \"make remove_current_tree\""; \
-##		echo "	================================================="; \
-##		exit 1; \
-##	fi
-##	make co
-##
-##newtree: _update_targetdate
-##	@make newsrc
-##	make compile_all
-##
 
 tftp:
 	mkdir -p /var/lib/tftpboot/`cat .targetfolder`
@@ -339,18 +254,21 @@ tftp:
 	sudo cp -r `cat .targetdate`_`cat .targetfolder`/usr/target/*.rom /var/lib/tftpboot/`cat .targetfolder`
 	sudo cp -r `cat .targetdate`_`cat .targetfolder`/usr/target/*.bin /var/lib/tftpboot/`cat .targetfolder`
 
-newsrc_lfe8:
-	rm -f .targetsetting
-	ln -s .target.lfe8 .targetsetting
-	@make newsrc
-
-newsrc_lfv70:
-	rm -f .targetsetting
-	ln -s .target.lfv70 .targetsetting
-	@make newsrc
 
 signage_copyback:
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/AppSrc/userApps/cgi_wrapper; make signage_copyback)
+
+
+
+chg_toshiba:
+	if [ ! -f `cat .targetdate`_`cat .targetfolder`/.chg_toshiba ] ; then \
+	   (cd `cat .targetdate`_`cat .targetfolder`; \
+	    echo -n "pwd="; pwd; \
+	    tar xvfz $(HOME)/aquam/toshiba_after.tgz; \
+	    touch .chg_toshiba); \
+	   make MAKEDIR=linux MAKETARGET=clean __compile; \
+	   make MAKEDIR=. MAKETARGET= __compile; \
+	fi
 
 
 ## set crontab
@@ -377,6 +295,7 @@ backup_daily_tar:
 	-find backup/ -mtime +20 -exec rm -f \{} \;
 	make gtags
 backup_daily:
+	mkdir -p backup
 	date +%y%m%d  > .backup_daily_datetime
 	if [ ! -f backup/`cat .backup_daily_datetime`00_daily.tar.gz ] ; then \
 		touch backup/`cat .backup_daily_datetime`00_daily.tar.gz; \
@@ -439,13 +358,30 @@ _mk_ref_tree:
 		chmod +w $(DIR); \
 		mv $(DIR) bak/$(DIR); \
 	fi
-	svn co $(REV) $(URL) $(DIR)
+	svn co $(SVNREVISION) $(URL) $(DIR)
+	if [ -d $(DIR)/ArchiveFiles ] ; then \
+		(cd $(DIR)/ArchiveFiles; rm -f CPU_* build_* cs_root* dcchd_* mrua* smp86xx_*;) \
+	fi
+	chmod -R a-w $(DIR)
+
+_mk_ref_tree_cvs:
+	mkdir -p bak
+	if [ -d bak/$(DIR) ] ; then \
+		(cd bak; sudo rm -rf $(DIR)); \
+	fi
+	if [ -d $(DIR) ] ; then \
+		chmod +w $(DIR); \
+		mv $(DIR) bak/$(DIR); \
+	fi
+	cvs -d $(URL) co $(SVNREVISION) -d $(DIR) $(TARGET)
 	if [ -d $(DIR)/ArchiveFiles ] ; then \
 		(cd $(DIR)/ArchiveFiles; rm -f CPU_* build_* cs_root* dcchd_* mrua* smp86xx_*;) \
 	fi
 	chmod -R a-w $(DIR)
 
 ## ===============================================
+BF1_SVNBASE=https://fp.svn.vserv.jp.panasonic.com/repos/PF/SIGMA
+MZ670_SVNBASE=https://co-dev-networkpf.svn.vserv.jp.panasonic.com/repos/iMX6/products/MZ670/trunk
 reference:
 #	make _mk_ref_tree  REV=-r464 URL=$(JW230_SVNBASE)/branches/NEW_MULTI_LIVE_KENTOU DIR=jw230.NEW_MULTI_LIVE_KENTOU.r464.latest
 #	make _mk_ref_tree  REV=-r102 URL=$(JW230_SVNBASE)/branches/NEW_MULTI_LIVE_KENTOU DIR=jw230.NEW_MULTI_LIVE_KENTOU.r102.oldest
@@ -456,5 +392,108 @@ reference:
 #	make _mk_ref_tree  REV=-r URL=$(JW230_SVNBASE)/trunk DIR=jw230.trunk.latest
 
 #	make _mk_ref_tree  REV= URL=$(JW230_SVNBASE)/tags/JX200_v182 DIR=JX200_v182
-	make _mk_ref_tree  REV= URL=$(VZ585N_SVNBASE)/trunk DIR=vz585n.trunk.latest
+#	make _mk_ref_tree  REV= URL=$(VZ585N_SVNBASE)/trunk DIR=vz585n.trunk.latest
+#	make _mk_ref_tree  REV= URL=$(BF1_SVNBASE)/trunk/bf1nw DIR=bf1nw.trunk.latest
+#	make _mk_ref_tree  REV= URL=$(MZ670_SVNBASE)/trunk DIR=mz670.trunk.latest
+#	make _mk_ref_tree_cvs  REV= URL=":pserver:hirai@asuka2:/usr/local/cvsroot" TARGET=sigma_lfbc70 DIR=sigma_lfbc70
+#	make _mk_ref_tree_cvs  REV= URL=":pserver:hirai@asuka2:/usr/local/cvsroot" TARGET=sigma_kernel DIR=sigma_kernel
+#	make _mk_ref_tree_cvs  REV= URL=":pserver:hirai@asuka2:/usr/local/cvsroot" TARGET=sigma_oss DIR=sigma_oss
+#	mkdir -p sigma
+	make _mk_ref_tree_cvs  REV= URL=":pserver:hirai@asuka2:/usr/local/cvsroot" TARGET=lf_garnet DIR=lf_garnet_trunk
+
+archive:
+	@(cd `cat .targetdate`_`cat .targetfolder`; \
+	  tar cvfz ../lighttpd_verup.tar.gz \
+		usr/rom/CONTENTS.TXT \
+		usr/src/AppSrc/lighttpd/diff_lighttpd*.txt \
+		usr/src/AppSrc/lighttpd/Makefile \
+		usr/src/AppSrc/lighttpd/makediff.sh \
+		usr/src/AppSrc/lighttpd/lighttpd-1.4.45.tar.gz)
+	@(cd `cat .targetdate`_`cat .targetfolder`; \
+	  tar cvfz ../valgrind_gdb_build.tar.gz \
+		usr/rom/CONTENTS.TXT \
+		usr/src/AppSrc/Makefile \
+		usr/src/AppSrc/termcap/Makefile \
+		usr/src/AppSrc/termcap/*.tar.gz \
+		usr/src/AppSrc/ncurses/Makefile \
+		usr/src/AppSrc/ncurses/*.tar.gz \
+		usr/src/AppSrc/gdb/Makefile \
+		usr/src/AppSrc/gdb/*.tar.gz \
+		usr/src/AppSrc/valgrind/Makefile \
+		usr/src/AppSrc/valgrind/*.tar.bz2)
+
+
+
+
+
+
+
+
+JW230_SVNBASE=https://jw230-wpf.svn.vserv.jp.panasonic.com/repos
+VZ575N_SVNBASE=https://vz575n-nt.svn.vserv.jp.panasonic.com/repos
+VZ585N_SVNBASE=https://networkpf.svn.vserv.jp.panasonic.com/repos/Sigma/products/VZ585N
+2017GARNET_SVNBASE=https://fp.svn.vserv.jp.panasonic.com/repos/MAIN/2017Garnet
+LF8_SVNBASE=https://fp.svn.vserv.jp.panasonic.com/repos/MAIN/LF8
+
+
+_newsrc_aquam:
+	date +%y%m%d  > .targetdate
+	echo "trunk" > .svnfolder
+	echo "$(2017GARNET_SVNBASE)" > .svnbase
+#	svn co $(SVNREVISION) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
+	mkdir -p `cat .targetdate`_`cat .targetfolder`
+	(cd `cat .targetdate`_`cat .targetfolder`; \
+	 sudo tar xvfz ../src_170526/devfiles.tgz; \
+	 sudo tar xvfz ../src_170526/ph1_dtv_Aquamarine_V0002_20170317.tgz; \
+	 sudo chown -R hirai.hirai ph1; \
+	 sudo mv ph1/* .)
+	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
+	 /bin/rm -f arm-2010q1; \
+	 ln -s /opt/redhat/arm-2010q1 .)
+
+_newsrc_sf2:
+	date +%y%m%d  > .targetdate
+	echo "trunk" > .svnfolder
+	echo "$(2017GARNET_SVNBASE)" > .svnbase
+	svn co $(SVNREVISION) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
+
+_newsrc_lfe8:
+	date +%y%m%d  > .targetdate
+	echo "trunk" > .svnfolder
+	echo "$(LF8_SVNBASE)" > .svnbase
+	svn co `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
+
+_newtree_lfe8 _newtree_sf2:
+	make _newsrc_`cat .targetfolder`
+	make compile_all
+##	make image
+
+newsrc_sf2hr4620_wlan:
+	echo 'sf2hr4620_wlan' > .targetfolder
+	basename `pwd` > .tksname
+	date +%y%m%d  > .targetdate
+	echo "branches" > .svnfolder
+	echo "$(2017GARNET_SVNBASE)" > .svnbase
+	svn co $(SVNREVISION) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
+	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
+	 /bin/rm -f arm-2010q1; \
+	 ln -s /opt/redhat/arm-2010q1 .)
+newtree_sf2hr4620_wlan:
+	make newsrc_sf2hr4620_wlan
+	make compile_all
+
+newsrc_sf2hr4620_panaapp:
+	echo 'sf2hr4620_panaapp' > .targetfolder
+	basename `pwd` > .tksname
+	date +%y%m%d  > .targetdate
+	echo "branches" > .svnfolder
+	echo "$(2017GARNET_SVNBASE)" > .svnbase
+	svn co $(SVNREVISION) `cat .svnbase`/`cat .svnfolder`/`cat .targetfolder` `cat .targetdate`_`cat .targetfolder`
+	(cd `cat .targetdate`_`cat .targetfolder`/tools; \
+	 /bin/rm -f arm-2010q1; \
+	 ln -s /opt/redhat/arm-2010q1 .)
+newtree_sf2hr4620_panaapp:
+	make newsrc_sf2hr4620_panaapp
+	make compile_all
+
 
