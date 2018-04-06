@@ -1,4 +1,8 @@
 
+git commit
+git push -u origin master
+
+--------------
 
 
 git init
@@ -75,4 +79,30 @@ ex)
 参考
 Gitの基本的な使い方メモ - Qiita
 https://qiita.com/opengl-8080/items/451c5967cbbc262f4f0d
+
+-----------------
+会社/Fodora16で github にアクセス出来無い問題
+ -> openssl の verup と curl が openssl を使うようになってないとだめ
+
+- opssl compile
+wget https://www.openssl.org/source/openssl-1.0.2-latest.tar.gz
+
+./config
+make
+make test
+sudo make install
+-> /usr/local/ssl にインストールされる
+cd /usr/bin
+sudo mv openssl openssl.org
+ln -s /usr/local/ssl/bin/openssl .
+
+- curl compile
+./configure --with-ssl=/usr/local/ssl --prefix /usr
+
+- git compile
+※ 一応 version up したけど、必要ないかも
+
+https://github.com/git/git/releases
+
+./configure --prefix=/usr
 
