@@ -1,4 +1,10 @@
 
+git clone https://github.com/hiraieject/MySettings.git
+
+git init
+git config --global user.name hiraieject
+git config --global user.email hirai@eject.org
+
 
 git commit .
 git status
