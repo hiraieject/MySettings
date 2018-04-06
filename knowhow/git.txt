@@ -1,6 +1,13 @@
 
+
 git commit
+
+git remote add origin https://hiraieject@github.com/hiraieject/MySettings.git
 git push -u origin master
+↑ 最初だけ
+git push
+↑ ２回目以降
+
 
 --------------
 
@@ -61,6 +68,9 @@ git reflog
 
 git rm <ファイル>
  -> ファイルを削除して、インデックスからも削除する
+
+-------------------------
+ssh-keygen -t rsa -b 2048 -C "hirai@eject.org"
 
 
 ------
