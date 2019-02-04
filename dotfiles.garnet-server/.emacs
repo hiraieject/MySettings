@@ -24,7 +24,7 @@
 (setq truncate-partial-width-windows nil)
 
 ;;; デフォルトの文字コード
-(set-default-coding-systems 'euc-jp-unix)
+;(set-default-coding-systems 'euc-jp-unix)  <- shell等で文字化けするので無効化
 (setq-default buffer-file-coding-system 'euc-jp-unix)
 
 ;;; キーワードで色分けする
