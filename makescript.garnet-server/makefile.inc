@@ -23,6 +23,7 @@ newtree:
 	echo $(SVNFOLDER) > .svnfolder
 	echo $(SVNTARGET) > .targetfolder
 	make REV="$(REV)" _newtree
+	@make current_link
 
 newsrc:
 ##	@if [ -d `cat .targetdate`_`cat .targetfolder` ] ; then \
@@ -36,6 +37,7 @@ newsrc:
 	echo $(SVNFOLDER) > .svnfolder
 	echo $(SVNTARGET) > .targetfolder
 	make REV="$(SVNREVISION)" _newsrc
+	@make current_link
 
 remove_current_tree:
 	sudo rm -rf `cat .targetdate`_`cat .targetfolder`
@@ -85,6 +87,7 @@ __compile:
 	  echo "make -C $(MAKEDIR) $(MAKETARGET)" > .build2.sh; \
 	  chmod +x .build2.sh)
 	@make MAKEDIR=. SCRIPT=../../.build2.sh __script
+	@make current_link
 __script:
 	@(cd `cat .targetdate`_`cat .targetfolder`; \
 	 echo "#!/bin/bash" > .build.sh; \
@@ -106,14 +109,25 @@ ifeq ($(CHG_TOSHIBA),yes)
 endif
 	make image
 	make chk_gtags
+	@date
+clean_all:
+	make MAKEDIR=. MAKETARGET=clean __compile
+
 compile_AppSrc:
 	@make backup_daily
 	make MAKEDIR=. MAKETARGET=AppSrc __compile
 	make chk_gtags
+	@date
 compile_PanaApps:
 	@make backup_daily
 	make MAKEDIR=. MAKETARGET=PanaApps __compile
 	make chk_gtags
+	@date
+clean_PanaApps:
+	@make backup_daily
+	make MAKEDIR=PanaApps MAKETARGET=clean __compile
+	make chk_gtags
+	@date
 compile_userapps: compile_AppSrc
 
 clean_AppSrc:
@@ -169,6 +183,7 @@ compile_lpad:
 	make MAKEDIR=. SCRIPT=./lpad_make.sh __script
 	make chk_gtags
 	make tftp
+	@date
 compile_dtvrec:
 	@make compile_lpad
 
@@ -195,9 +210,13 @@ distclean_ncurses:
 	make MAKEDIR=AppSrc/ncurses MAKETARGET=distclean __compile
 
 kernel_menuconfig:
-	make MAKEDIR=linux-2.6.32-sLDx MAKETARGET=menuconfig __compile
+	make MAKEDIR=linux MAKETARGET=menuconfig __compile
 kernel_distclean:
-	make MAKEDIR=linux-2.6.32-sLDx MAKETARGET=distclean __compile
+	make MAKEDIR=linux MAKETARGET=distclean __compile
+
+menuconfig:
+	make MAKEDIR=linux MAKETARGET=menuconfig __compile
+
 
 compile_ui_test:
 	make MAKEDIR=dtvrec/appli/tks_dtv/ui MAKETARGET=ui_test __compile
@@ -205,7 +224,9 @@ compile_ui_test:
 #	make tftp
 
 install_gdb:
-	cp 171116_sf2hr4620_wlan/usr/local/bin/gdb* `cat .targetdate`_`cat .targetfolder`/usr/local/bin
+	cp ~/sf2/171116_sf2hr4620_wlan/usr/local/bin/gdb* `cat .targetdate`_`cat .targetfolder`/usr/local/bin
+	echo '' >> `cat .targetdate`_`cat .targetfolder`/usr/rom/CONTENTS.TXT
+	echo '-usr/local/bin/gdb' >> `cat .targetdate`_`cat .targetfolder`/usr/rom/CONTENTS.TXT
 
 rootfs:
 	make MAKEDIR=. MAKETARGET="rootfs" __compile
@@ -246,6 +267,11 @@ clean_gtags:
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/AppSrc; rm -f G*)
 	(cd `cat .targetdate`_`cat .targetfolder`/usr/src/dtvrec; rm -f G*)
 
+current_link:
+	rm -f current_`cat .targetfolder` current_`cat .targetfolder`_USB_MAIN current_tftp_`cat .targetfolder`
+	ln -s `cat .targetdate`_`cat .targetfolder` current_`cat .targetfolder`
+	ln -s `cat .targetdate`_`cat .targetfolder`/usr/target/USB/MAIN current_`cat .targetfolder`_USB_MAIN
+	ln -s /var/lib/tftpboot/`cat .targetfolder` current_tftp_`cat .targetfolder`
 
 tftp:
 	mkdir -p /var/lib/tftpboot/`cat .targetfolder`
@@ -290,9 +316,8 @@ backup_daily_tar:
 	 find usr/src -name \*.php >> .daily_files.txt; \
 	 find usr/src -name \*.conf >> .daily_files.txt; \
 	 find usr/src -name \?akefile >> .daily_files.txt; \
-	 echo $$HOME/garnet/Makefile >> .daily_files.txt; \
 	 tar cvfz ../backup/`cat ../.backup_daily_datetime`00_daily.tar.gz -T .daily_files.txt)
-	-find backup/ -mtime +20 -exec rm -f \{} \;
+	-find backup/ -mtime +30 -exec rm -f \{} \;
 	make gtags
 backup_daily:
 	mkdir -p backup

@@ -1,15 +1,17 @@
 
 git clone https://github.com/hiraieject/MySettings.git
+github の場合、ブラウザで表示したときの右上に緑色の [Clone or download] があるので、それを押すとURLが表示される
 
 git init
 git config --global user.name hiraieject
 git config --global user.email hirai@eject.org
 
 
-git commit .
+git .
+git commit
 git status
 
-git remote add origin https://hiraieject@github.com/hiraieject/MySettings.git
+git remote add origin https://github.com/hiraieject/MySettings.git
 git push -u origin master
 ↑ 最初だけ
 git push
