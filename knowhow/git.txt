@@ -1,11 +1,21 @@
 
-git clone https://github.com/hiraieject/MySettings.git
-github の場合、ブラウザで表示したときの右上に緑色の [Clone or download] があるので、それを押すとURLが表示される
-
+-----------------------------
+##### 初期設定
 git init
 git config --global user.name hiraieject
 git config --global user.email hirai@eject.org
+git config --global http.proxy http://10.77.8.70:8080
+git config --global https.proxy http://10.77.8.70:8080
 
+.netrc
+machine github.com
+login hiraieject
+password ********
+
+-----------------------------
+##### MySettings の取得
+git clone https://github.com/hiraieject/MySettings.git
+github の場合、ブラウザで表示したときの右上に緑色の [Clone or download] があるので、それを押すとURLが表示される
 
 git .
 git commit
