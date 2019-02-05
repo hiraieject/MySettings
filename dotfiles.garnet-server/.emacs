@@ -1,5 +1,9 @@
 ;; .emacs
 
+(setq initial-frame-alist
+      '((width  . 120)			; サイズ(幅)
+	(height .  40)			; サイズ(高さ)
+	))
 ;; -------------------------------------------- basic emacs setting
 
 (setq load-path (cons "~/lisp" load-path))
@@ -278,7 +282,7 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#555555" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 79 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
+ '(default ((t (:inherit nil :stipple nil :background "#002B36" :foreground "#839496" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 79 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
 ;;; '(default ((t (:inherit nil :stipple nil :background "#143A81" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 79 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
 
 ;; ===========================================================================

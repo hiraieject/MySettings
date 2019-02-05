@@ -4,9 +4,11 @@
 git init
 git config --global user.name hiraieject
 git config --global user.email hirai@eject.org
-git config --global http.proxy http://10.77.8.70:8080
-git config --global https.proxy http://10.77.8.70:8080
+#git config --global http.proxy http://10.77.8.70:8080
+#git config --global https.proxy http://10.77.8.70:8080
+git config --global core.editor emacs
 
+##### password username を毎回入力しない設定
 .netrc
 machine github.com
 login hiraieject
@@ -27,14 +29,28 @@ git push -u origin master
 git push
 ↑ ２回目以降
 
-password username を省略する
-~/.netrc
-machine github.com
-login username
-password xxxxxxx
-
 --------------
+##### リポジトリの新規作成
 
+- - - - - -
+// GitHub でリポジトリを作成、URLを確定
+// clone する
+	git clone https://github.com/hiraieject/pixel_draw.git
+// 取得したフォルダにファイルを配置して git add する
+   	git add *
+// commit する
+   	git commit *
+// nicknameをつける
+	git remote add pixel_draw https://github.com/hiraieject/pixel_draw.git
+// 初回push
+	git push -u pixel_draw master
+// 2回目以降push
+	git push
+
+- - - - - -
+      	git remote add vector_draw https://github.com/hiraieject/vector_draw.git
+    	git push -u draw_draw master
+	git push
 
 
 git init
@@ -106,6 +122,9 @@ https://github.com/<user name>/<repository name>.git
 
 git remote add <nickname> https://github.com/<user name>/<repository name>.git
  -> 作成したリポジトリを nickname という名前でアクセス出来るようにする
+ ex)
+ git remote add pixel_draw https://github.com/hiraieject/pixel_draw.git
+ git remote add vector_draw https://github.com/hiraieject/vector_draw.git
 
 git push -u <nickname> master
 ex)
