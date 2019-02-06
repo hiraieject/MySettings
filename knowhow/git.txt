@@ -40,10 +40,10 @@ git push
    	git add *
 // commit する
    	git commit *
-// nicknameをつける
-	git remote add pixel_draw https://github.com/hiraieject/pixel_draw.git
-// 初回push
-	git push -u pixel_draw master
+#// nicknameをつける
+#	git remote add pixel_draw https://github.com/hiraieject/pixel_draw.git
+#// 初回push
+#	git push -u pixel_draw master
 // 2回目以降push
 	git push
 
@@ -52,6 +52,10 @@ git push
     	git push -u draw_draw master
 	git push
 
+git clone https://github.com/hiraieject/.emacs.d.git
+git clone https://github.com/hiraieject/MySettings.git
+git clone https://github.com/hiraieject/pixel_draw.git
+git clone https://github.com/hiraieject/pixel_draw.git
 
 git init
  -> カレントフォルダをリポジトリにする
