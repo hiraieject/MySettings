@@ -23,6 +23,9 @@ alias       DIFF='touch DIFF; rm DIFF; ln -s ~/DIFF .; cvs diff -c > ~/DIFF/diff
 alias langc="export LANG=C"
 alias langj="LANG=ja_JP.utf8"
 
+alias       em='emacs &'
+alias       gt='gnome-terminal &'
+
 export XDISPLAY86=192.168.0.86:0
 alias       em86='DISPLAY=$XDISPLAY86.0; emacs &'
 alias       gt86='DISPLAY=$XDISPLAY86.0; gnome-terminal &'
