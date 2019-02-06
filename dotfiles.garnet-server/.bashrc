@@ -25,18 +25,12 @@ alias langj="LANG=ja_JP.utf8"
 
 alias       em='emacs &'
 alias       gt='gnome-terminal &'
-
-export XDISPLAY86=192.168.0.86:0
-alias       em86='DISPLAY=$XDISPLAY86.0; emacs &'
-alias       gt86='DISPLAY=$XDISPLAY86.0; gnome-terminal &'
-export XDISPLAY100=192.168.83.2:0
-#export XDISPLAY100=hiraipc:0
-alias       em100='DISPLAY=$XDISPLAY100.0; emacs &'
-alias       em101='DISPLAY=$XDISPLAY100.1; emacs &'
-alias       gt100='DISPLAY=$XDISPLAY100.0; gnome-terminal &'
-alias       gt101='DISPLAY=$XDISPLAY100.1; gnome-terminal &'
-
-alias       wk='gnome-terminal --display=$XDISPLAY100.1 --geometry=724x936+2550+670 &'
+export XDISPLAY00=localhost:0.0
+alias       em00='export DISPLAY=$XDISPLAY00; emacs &'
+alias       gt00='export DISPLAY=$XDISPLAY00; gnome-terminal &'
+export XDISPLAY86=192.168.0.86:0.0
+alias       em86='export DISPLAY=$XDISPLAY86; emacs &'
+alias       gt86='export DISPLAY=$XDISPLAY86; gnome-terminal &'
 
 alias       eq1='cd ~/eq1'
 alias       eq1src='cd ~/eq1/current_startup/usr/src/'
