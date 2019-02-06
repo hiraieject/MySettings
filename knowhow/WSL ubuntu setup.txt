@@ -1,0 +1,55 @@
+
+
+・コントロールパネル → プログラムと機能 → Windowsの機能の有効化または無効化
+ Windows Subsystem for Linux を有効化
+
+・Microsoft Store を起動
+ 検索でLinuxを検索
+ Ubuntu 18.04 LTS を選択してインストール
+
+
+・アプリから ubuntu を起動、ユーザー名とパスワードを設定
+
+以下、sudo は省略
+
+・.bashrc に以下を追加(Panasonicネット環境下のみ)
+echo export HTTP_PROXY="http://10.77.8.70:8080" >> ~/.bashrc
+echo export http_proxy="http://10.77.8.70:8080" >> ~/.bashrc
+echo export FTP_PROXY="http://10.77.8.70:8080" >> ~/.bashrc
+echo export ftp_proxy="http://10.77.8.70:8080" >> ~/.bashrc
+echo export proxy="http://10.77.8.70:8080" >> ~/.bashrc
+source ~/.bashrc
+
+
+・リポジトリの国内サーバー化、既存パッケージのアップデート
+sudo -s
+cp /etc/apt/sources.list /etc/apt/sources.list.bak
+sed -i -e 's%http://.*.ubuntu.com%http://ftp.jaist.ac.jp/pub/Linux%g' /etc/apt/sources.list
+apt-get update
+apt-get upgrade
+
+
+・開発環境
+apt-get install build-essential
+apt-get install xorg-dev
+apt-get install libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev nodejs libxml2-dev libxslt1-dev
+
+・X-Window
+apt-get install x11-apps x11-utils x11-xserver-utils
+apt-get install gnome-shell-extensions
+apt-get install gnome-terminal
+echo 'export DISPLAY=localhost:0.0' >> ~/.bashrc
+source ~/.bashrc
+
+・日本語メッセージ
+apt-get install language-pack-ja
+apt-get install fonts-ipafont
+update-locale LANG=ja_JP.UTF-8
+
+apt-get install emacs
+
+参考URL
+  インストール全般、日本語化
+	https://qiita.com/Aruneko/items/c79810b0b015bebf30bb
+	https://laboradian.com/installation-and-setting-of-wsl/
+  X-Window
