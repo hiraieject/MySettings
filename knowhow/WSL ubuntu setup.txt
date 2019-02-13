@@ -1,4 +1,6 @@
 
+・オフラインインストール
+https://docs.microsoft.com/en-us/windows/wsl/install-manual
 
 ・コントロールパネル → プログラムと機能 → Windowsの機能の有効化または無効化
  Windows Subsystem for Linux を有効化
@@ -25,28 +27,39 @@ source ~/.bashrc
 sudo -s
 cp /etc/apt/sources.list /etc/apt/sources.list.bak
 sed -i -e 's%http://.*.ubuntu.com%http://ftp.jaist.ac.jp/pub/Linux%g' /etc/apt/sources.list
-apt-get update
-apt-get upgrade
+apt update
+apt upgrade
 
 
 ・開発環境
-apt-get install build-essential
-apt-get install xorg-dev
-apt-get install libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev nodejs libxml2-dev libxslt1-dev
+apt install build-essential
+apt install xorg-dev
+apt install libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev nodejs libxml2-dev libxslt1-dev
+apt install gdb
+apt install global
 
 ・X-Window
-apt-get install x11-apps x11-utils x11-xserver-utils
-apt-get install gnome-shell-extensions
-apt-get install gnome-terminal
+apt install x11-apps x11-utils x11-xserver-utils
+apt install gnome-shell-extensions
+apt install gnome-terminal
 echo 'export DISPLAY=localhost:0.0' >> ~/.bashrc
 source ~/.bashrc
 
+・X-Server on Windows10
+https://ja.osdn.net/projects/sfnet_xming/releases/
+Xming-fonts-7-7-0-10-setup.exe
+Xming-6-9-0-31-setup.exe
+※最新版をいれる
+スタートアップの Xming のショートカットを作成し、プロパティのリンク先を以下に書き換え
+"C:\Program Files (x86)\Xming\Xming.exe" :0 -clipboard -multiwindow -ac -dpi 100 -screen 0 1920 1200
+Window start menu のスタートアップに上記ショートカットを登録して、自動起動とする
+
 ・日本語メッセージ
-apt-get install language-pack-ja
-apt-get install fonts-ipafont
+apt install language-pack-ja
+apt install fonts-ipafont
 update-locale LANG=ja_JP.UTF-8
 
-apt-get install emacs
+apt install emacs
 
 参考URL
   インストール全般、日本語化
