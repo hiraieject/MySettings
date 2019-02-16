@@ -1,4 +1,3 @@
-
 ・オフラインインストール
 https://docs.microsoft.com/en-us/windows/wsl/install-manual
 
@@ -44,6 +43,7 @@ apt install gnome-shell-extensions
 apt install gnome-terminal
 echo 'export DISPLAY=localhost:0.0' >> ~/.bashrc
 source ~/.bashrc
+apt install libcairo2-dev
 
 ・X-Server on Windows10
 https://ja.osdn.net/projects/sfnet_xming/releases/
