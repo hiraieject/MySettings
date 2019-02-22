@@ -103,6 +103,7 @@ __script:
 	 bash .build.sh)
 
 compile_all:
+	@make install_gdb
 	make MAKEDIR=. MAKETARGET= __compile
 ifeq ($(CHG_TOSHIBA),yes)
 	make chg_toshiba
@@ -224,9 +225,12 @@ compile_ui_test:
 #	make tftp
 
 install_gdb:
-	cp ~/sf2/171116_sf2hr4620_wlan/usr/local/bin/gdb* `cat .targetdate`_`cat .targetfolder`/usr/local/bin
-	echo '' >> `cat .targetdate`_`cat .targetfolder`/usr/rom/CONTENTS.TXT
-	echo '-usr/local/bin/gdb' >> `cat .targetdate`_`cat .targetfolder`/usr/rom/CONTENTS.TXT
+	if [ ! -f `cat .targetdate`_`cat .targetfolder`/usr/local/bin/gdbserver ] ; then \
+	   cp ~/gdb/gdb* `cat .targetdate`_`cat .targetfolder`/usr/local/bin; \
+	   echo '' >> `cat .targetdate`_`cat .targetfolder`/usr/rom/CONTENTS.TXT; \
+	   echo '-usr/local/bin/gdbserver' >> `cat .targetdate`_`cat .targetfolder`/usr/rom/CONTENTS.TXT; \
+	fi
+##	   echo '-usr/local/bin/gdb' >> `cat .targetdate`_`cat .targetfolder`/usr/rom/CONTENTS.TXT;
 
 rootfs:
 	make MAKEDIR=. MAKETARGET="rootfs" __compile
